@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: procurement-board
+    runtime: python
+    plan: free
+    healthCheckPath: /health
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn server:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: BOARD_PASSWORD
+        sync: false
+      - key: BOARD_SYNC_TOKEN
+        sync: false
+      - key: GITHUB_REPO
+        value: sunhongwei233-dev/procurement-board
+      - key: GITHUB_TOKEN
+        sync: false
