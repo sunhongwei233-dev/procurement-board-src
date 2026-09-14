@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>采购协作表</title>
+<style>
+body{font-family:"Segoe UI","Microsoft YaHei",sans-serif;margin:0;background:#f4f1ea;color:#1c1b19}
+.wrap{max-width:1860px;margin:0 auto;padding:16px 12px 64px}
+h1{margin:0 0 6px;font-size:1.2rem}
+.muted{color:#6b6560;font-size:12px}
+.formula{background:#fff;border:1px solid #e6e0d4;border-radius:10px;padding:8px 12px;margin:8px 0;font-size:12px;line-height:1.45}
+.tabs{display:flex;gap:8px;margin:10px 0 6px;flex-wrap:wrap}
+.tabs button{border:1px solid #c9c2b4;background:#fff;border-radius:999px;padding:6px 14px;cursor:pointer}
+.tabs button.on{background:#0f5c4c;color:#fff;border-color:#0f5c4c}
+.bar{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px;align-items:center}
+input,select,textarea,button{font:inherit}
+.bar input,.bar select{padding:5px 8px;border:1px solid #ddd;border-radius:8px}
+.pager{display:flex;gap:6px;align-items:center;margin:8px 0}
+.pager button{padding:4px 10px;border:1px solid #c9c2b4;background:#fff;border-radius:6px;cursor:pointer}
+.pager button:disabled{opacity:.4;cursor:default}
+table{border-collapse:collapse;width:100%;background:#fff}
+th,td{border:1px solid #e6e0d4;padding:5px 6px;font-size:12px;vertical-align:top}
+th{background:#0f5c4c;color:#fff;position:sticky;top:0;z-index:1}
+a{color:#0f5c4c}
+tr.st-cancelled,tr.st-cancelled:nth-child(even){background:#f5c6c6 !important}
+tr.st-bought,tr.st-bought:nth-child(even){background:#c8efd0 !important}
+.edit{display:flex;align-items:center;gap:3px}
+.pfx{color:#6b6560}
+.px{width:64px;padding:3px 5px;border:1px solid #ccc;border-radius:6px}
+.px.sm{width:52px}
+.note{width:120px;min-height:36px;resize:vertical;border:1px solid #ccc;border-radius:6px;padding:3px}
+.ops{white-space:nowrap}
+.ops .btn{margin:1px;padding:3px 6px;border:1px solid #c9c2b4;border-radius:6px;background:#fff;cursor:pointer}
+.ops .drop{border-color:#b42318;color:#b42318}
+.ops .pick{border-color:#1a7f4c;color:#1a7f4c}
+.ops .ok{background:#0f5c4c;color:#fff;border-color:#0f5c4c}
+.num-strong{font-weight:700;font-size:13px}
+.hint{color:#6b6560;font-size:11px}
+.thumb{width:48px;height:48px;object-fit:cover;border-radius:6px;background:#eee}
+.title-cell{min-width:220px;max-width:340px}
+.title-link{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;white-space:normal;word-break:break-word;line-height:1.35;max-height:calc(1.35em * 3)}
+#sync{margin-left:8px}
+</style></head>
+<body><div class="wrap">
+<h1>采购协作表</h1>
+<p class="muted">本机只同步商品信息 · 价格/重量/备注以本页为准 · 多人改动自动同步 <span id="sync"></span></p>
+<div class="formula">毛利 = 售价 − 1688 − 头程 − 尾程 − 成交费11.5% − 跨国费1.5%+$0.40 − 广告10% − 退货（含税基数=售价×1.075）。改 eBay$ / 1688¥ / 重量费用后点<strong>确定</strong>重算。</div>
+<div class="tabs">
+  <button type="button" id="tab-active" class="on">进行中 <span id="n-active">0</span></button>
+  <button type="button" id="tab-bought">已采购 <span id="n-bought">0</span></button>
+  <button type="button" id="tab-cancelled">取消采购 <span id="n-cancelled">0</span></button>
+</div>
+<div class="bar">
+<input id="q" placeholder="标题 / item_id / 备注 / 店名 / 上线时间" style="min-width:220px"/>
+<select id="page-size"><option value="20">每页20</option><option value="30">每页30</option><option value="50">每页50</option></select>
+</div>
+<div class="pager">
+  <button type="button" id="prev">上一页</button>
+  <span id="pageinfo">1 / 1</span>
+  <button type="button" id="next">下一页</button>
+  <span class="muted">本页 <span id="shown">0</span> · 筛选后共 <span id="filtered">0</span></span>
+</div>
+<table><thead><tr>
+<th>序号</th><th>图</th><th>商品</th><th>本链Sold</th><th>上线时间</th>
+<th>判定</th><th>毛利%</th><th>毛利$</th>
+<th>eBay$</th><th>本机参考$</th><th>1688¥</th>
+<th>头程$</th><th>尾程$</th><th>退费$</th>
+<th>重量kg</th><th>长×宽×高</th>
+<th>进度</th><th>议价人</th><th>备注</th><th>1688备注</th>
+<th>操作</th>
+</tr></thead><tbody id="tbody"></tbody></table>
+</div>
+<script src="/static/board.js?v=3"></script>
+</body></html>
