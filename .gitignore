@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.env
+.token.tmp
+.venv/
+data/state.json.bak
+*.log
+cloudflared.exe
+tools/
+_tmp_*.py
+*.tmp
