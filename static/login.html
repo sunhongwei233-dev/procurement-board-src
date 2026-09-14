@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>登录 · 采购协作表</title>
+<style>
+body{font-family:"Segoe UI","Microsoft YaHei",sans-serif;background:#f4f1ea;display:flex;min-height:100vh;align-items:center;justify-content:center;margin:0}
+.box{background:#fff;border:1px solid #e6e0d4;border-radius:14px;padding:28px 26px;width:320px}
+h1{font-size:1.1rem;margin:0 0 14px}
+input,button{width:100%;box-sizing:border-box;padding:10px;border-radius:8px;font:inherit}
+input{border:1px solid #ccc;margin-bottom:10px}
+button{border:0;background:#0f5c4c;color:#fff;cursor:pointer}
+.err{color:#b42318;font-size:13px;min-height:18px}
+</style></head>
+<body><div class="box">
+<h1>采购协作表</h1>
+<p style="color:#6b6560;font-size:13px;margin:0 0 12px">云端共享议价。改价、备注、取消采购会存档；本机再同步不会覆盖这些字段。</p>
+<p class="err" id="err"></p>
+<input id="pw" type="password" placeholder="访问密码" autofocus/>
+<button type="button" id="go">进入</button>
+</div>
+<script>
+const pw=document.getElementById('pw'), err=document.getElementById('err');
+async function login(){
+  err.textContent='';
+  const r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pw.value})});
+  if(r.ok){ location.href='/'; return; }
+  err.textContent='密码错误';
+}
+document.getElementById('go').onclick=login;
+pw.addEventListener('keydown',e=>{ if(e.key==='Enter') login(); });
+</script>
+</body></html>
